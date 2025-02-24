@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WheeleDeal - Buy Used Cars</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .search-bar {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .container {
+            display: flex;
+            padding: 20px;
+        }
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 20px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        .filters h3 {
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .filter-options label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .listings {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .car-card {
+            background: white;
+            padding: 15px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            position: relative;
+            width: 300px;
+            text-align: center;
+        }
+        .car-card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .wishlist-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: red;
+        }
+        .promo-banner {
+            background: #ffcc00;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+         .container {
+            display: flex;
+            padding: 20px;
+        }
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 20px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        .filters h3 {
+            margin-bottom: 10px;
+           
+        }
+        .hidden {
+            display: none;
+        }
+        .budget-section {
+            border: 0px solid #ccc;
+            padding: 15px;
+            border-radius: 10px;
+            background: #fff;
+        }
+        .budget-section input {
+            width: 900p;
+            border: none;
+            font-weight: bold;
+            background: transparent;
+            text-align: center;
+        }
+        .budget-slider {
+            width: 100%;
+        }
+        .budget-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .budget-buttons button {
+            border: none;
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h2>WheeleDeal</h2>
+        <input type="text" class="search-bar" placeholder="Search for your favourite cars">
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i> Account
+        </div>
+    </nav>
+    <div class="promo-banner">Check out our latest offers on used cars!</div>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="filters">
+                <h3>Budget</h3>
+                <div id="budget" class="budget-section">
+                    <input type="text" value="₹ 1,00,000" readonly>
+                    <input type="text" value="₹ 15,00,000" readonly>
+                    <input type="range" class="budget-slider" min="100000" max="1500000" step="50000">
+                    <p>Minimum <span style="float:right;">Maximum</span></p>
+                    <div class="budget-buttons">
+                        <button>Under 3 lakh</button>
+                        <button>From 3 lakh - 5 lakh</button>
+                        <button>From 5 lakh - 7 lakh</button>
+                        <button>From 7 lakh - 10 lakh</button>
+                        <button>Above 10 lakh</button>
+                    </div>
+                </div>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="filters">
+                <h3>Budget</h3>
+                <div class="filter-options">
+                    <label><input type="checkbox"> Under 3 lakh</label>
+                    <label><input type="checkbox"> 3 - 5 lakh</label>
+                    <label><input type="checkbox"> 5 - 7 lakh</label>
+                    <label><input type="checkbox"> 7 - 10 lakh</label>
+                    <label><input type="checkbox"> Above 10 lakh</label>
+                </div>
+                <h3>Make & Model</h3>
+                <div class="filter-options">
+                    <label><input type="checkbox"> Tata NEXON</label>
+                    <label><input type="checkbox"> Honda City</label>
+                    <label><input type="checkbox"> Maruti Ciaz</label>
+                    <label><input type="checkbox"> Hyundai Creta</label>
+                    <label><input type="checkbox"> Ford EcoSport</label>
+                    <label><input type="checkbox"> Hyundai Verna</label>
+                </div>
+                <h3>Other Filters</h3>
+                <div class="filter-options">
+                    <label><input type="checkbox"> Model Year</label>
+                    <label><input type="checkbox"> Kms Driven</label>
+                    <label><input type="checkbox"> Fuel</label>
+                    <label><input type="checkbox"> Transmission</label>
+                    <label><input type="checkbox"> Color</label>
+                    <label><input type="checkbox"> Features</label>
+                    <label><input type="checkbox"> Owners</label>
+                    <label><input type="checkbox"> RTO</label>
+                    <label><input type="checkbox"> Safety Rating</label>
+                </div>
+            </div>
+        </aside>
+        <section class="listings">
+            <div class="car-card">
+                <i class="fas fa-heart wishlist-icon"></i>
+                <img src="car1.jpg" alt="Car 1">
+                <h4>2021 Maruti Ertiga VXI CNG</h4>
+                <p>₹ 7.93L + other charges</p>
+            </div>
+            <div class="car-card">
+                <i class="fas fa-heart wishlist-icon"></i>
+                <img src="car2.jpg" alt="Car 2">
+                <h4>2019 Hyundai Verna 1.6 VTVT SX O</h4>
+                <p>₹ 7.60L + other charges</p>
+            </div>
+            <div class="car-card">
+                <i class="fas fa-heart wishlist-icon"></i>
+                <img src="car3.jpg" alt="Car 3">
+                <h4>2019 Ford EcoSport TITANIUM 1.5L PETROL</h4>
+                <p>₹ 7.60L + other charges</p>
+            </div>
+            <div class="car-card">
+                <i class="fas fa-heart wishlist-icon"></i>
+                <img src="car4.jpg" alt="Car 4">
+                <h4>2022 Maruti Ciaz SIGMA 1.5 SHVS MT</h4>
+                <p>₹ 7.91L + other charges</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

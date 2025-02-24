@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password - WheeledDeal</title>
+    <style>
+        /* General reset */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f7f4f1;
+        }
+
+        /* Centered card for forgot password */
+        .forgot-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .forgot-card {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        .forgot-card h2 {
+            font-size: 28px;
+            margin-top: 5px; /* Reduced space between WheeledDeal and Forgot Password */
+            margin-bottom: 10px; /* Reduced bottom margin for tighter spacing */
+            color: #333;
+        }
+
+        .forgot-card form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .forgot-card input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .forgot-card button {
+            padding: 12px;
+            background-color: #ff471a;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .forgot-card button:hover {
+            background-color: #e63d14;
+        }
+
+        .forgot-card .back-link {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .forgot-card .back-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .forgot-card .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Logo alignment */
+        .logo {
+            display: flex;
+            flex-direction: column; /* Stack logo and text vertically */
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px; /* Reduced space between logo and WheeledDeal text */
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            color: #333;
+            margin-top: 5px; /* Reduced space between logo and WheeledDeal text */
+        }
+
+        @media (max-width: 480px) {
+            .forgot-card {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="forgot-container">
+        <div class="forgot-card">
+            <!-- Logo -->
+            <div class="logo">
+                <img src="images/logo3.png" alt="Logo">
+                <h1>WheeledDeal</h1>
+            </div>
+
+            <h2>Forgot Password</h2>
+            <p>Enter your email address to reset your password.</p>
+            <form action="forgot-password.php" method="POST">
+                <input type="email" name="email" placeholder="Email Address" required>
+                <button type="submit">Send Reset Link</button>
+            </form>
+            <p class="back-link">
+                Remembered? <a href="login.php">Log In</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
