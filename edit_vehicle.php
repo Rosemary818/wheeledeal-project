@@ -26,6 +26,19 @@ if ($vehicle_id) {
     }
 }
 
+// Fetch all brands from the brands table
+$brand_sql = "SELECT name FROM brands"; // Adjust the table name if necessary
+$brand_result = $conn->query($brand_sql);
+$brands = [];
+
+if ($brand_result && $brand_result->num_rows > 0) {
+    while ($row = $brand_result->fetch_assoc()) {
+        $brands[] = $row['name']; // Store each brand in an array
+    }
+} else {
+    echo "No brands found or query failed: " . $conn->error; // Debugging output
+}
+
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $model = $_POST['model'];
@@ -35,6 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = $_POST['description'];
     $fuel_type = $_POST['fuel_type'];
     $transmission = $_POST['transmission'];
+    $address = $_POST['address'];
+    $brand = $_POST['brand'];
     
     $sql = "UPDATE vehicle SET 
             model = ?, 
@@ -43,11 +58,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mileage = ?, 
             description = ?, 
             fuel_type = ?, 
-            transmission = ? 
+            transmission = ?, 
+            address = ?, 
+            brand = ? 
             WHERE vehicle_id = ? AND seller_id = ?";
             
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sisdsssis", $model, $year, $price, $mileage, $description, $fuel_type, $transmission, $vehicle_id, $seller_id);
+    $stmt->bind_param("sisissssssi", $model, $year, $price, $mileage, $description, $fuel_type, $transmission, $address, $brand, $vehicle_id, $seller_id);
+
+
     
     if ($stmt->execute()) {
         // Handle new photo uploads if any
@@ -110,6 +129,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="input-group">
                         <input type="number" name="mileage" value="<?php echo htmlspecialchars($vehicle['mileage']); ?>" placeholder="Mileage" required>
                     </div>
+                    <div class="input-group textarea-group">
+                        <textarea name="description" placeholder="Vehicle Description" required><?php echo htmlspecialchars($vehicle['description']); ?></textarea>
+                    </div>
                     <div class="input-group">
                         <select name="fuel_type" required>
                             <option value="Petrol" <?php echo $vehicle['fuel_type'] == 'Petrol' ? 'selected' : ''; ?>>Petrol</option>
@@ -124,8 +146,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="Manual" <?php echo $vehicle['transmission'] == 'Manual' ? 'selected' : ''; ?>>Manual</option>
                         </select>
                     </div>
-                    <div class="input-group textarea-group">
-                        <textarea name="description" placeholder="Vehicle Description" required><?php echo htmlspecialchars($vehicle['description']); ?></textarea>
+                    <div class="input-group">
+                        <label for="brand">Select Brand:</label>
+                        <select name="brand" id="brand" required>
+                            <option value="">Select Brand</option>
+                            <?php foreach ($brands as $brand): ?>
+                                <option value="<?php echo htmlspecialchars($brand); ?>">
+                                    <?php echo htmlspecialchars($brand); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="address">Address:</label>
+                        <input type="text" name="address" value="<?php echo htmlspecialchars($vehicle['address']); ?>" placeholder="Enter Address" required>
                     </div>
                 </div>
                 <div class="input-group photo-upload">

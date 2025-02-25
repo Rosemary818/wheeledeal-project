@@ -76,9 +76,9 @@ if (!$result) {
 
         <nav>
             <div class="icons">
-                <?php if (isset($_SESSION['name'])): ?>
+                <!-- <?php if (isset($_SESSION['name'])): ?>
                     <span class="user-name">Welcome, <?php echo htmlspecialchars($_SESSION['name']); ?>!</span>
-                <?php endif; ?>
+                <?php endif; ?> -->
                 <div class="nav-links">
                     <a href="index.php">Back to Home</a>
                     <a href="my_wishlist.php">My Wishlist</a>
