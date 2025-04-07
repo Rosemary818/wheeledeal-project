@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include 'db_connect.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -8,18 +8,65 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Fetch wishlisted vehicles
-$sql = "SELECT v.vehicle_id, v.model, v.year, v.price, vp.photo_file_name, vp.photo_file_path
-        FROM tbl_wishlist w
-        JOIN vehicle v ON w.vehicle_id = v.vehicle_id
-        LEFT JOIN vehicle_photos vp ON v.vehicle_id = vp.vehicle_id
-        WHERE w.user_id = ?
-        ORDER BY v.created_at DESC";
+// Debug the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $_SESSION['user_id']);
-$stmt->execute();
-$result = $stmt->get_result();
+// Fetch wishlisted vehicles with their specifications
+$sql = "SELECT DISTINCT 
+        v.*,
+        vs.length,
+        vs.width,
+        vs.height,
+        vs.wheelbase,
+        vs.ground_clearance,
+        vs.kerb_weight,
+        vs.seating_capacity,
+        vs.boot_space,
+        vs.fuel_tank_capacity,
+        (SELECT photo_file_path FROM tbl_photos 
+         WHERE vehicle_id = v.vehicle_id 
+         LIMIT 1) as photo_file_path
+        FROM tbl_wishlist w
+        JOIN tbl_vehicles v ON w.vehicle_id = v.vehicle_id
+        LEFT JOIN tbl_vehicle_specifications vs ON v.vehicle_id = vs.vehicle_id
+        WHERE w.user_id = ?
+        AND (v.status = 'active' OR v.status IS NULL)";
+
+// Debug information
+error_log("SQL Query: " . $sql);
+error_log("User ID: " . $_SESSION['user_id']);
+
+// Execute the query
+if ($stmt = $conn->prepare($sql)) {
+    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    die("Error in prepare statement: " . $conn->error);
+}
+
+// Handle wishlist removal
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_vehicle'])) {
+    $vehicle_id = $_POST['vehicle_id'];
+    $delete_sql = "DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?";
+    if ($delete_stmt = $conn->prepare($delete_sql)) {
+        $delete_stmt->bind_param("ii", $_SESSION['user_id'], $vehicle_id);
+        $delete_stmt->execute();
+        header("Location: my_wishlist.php");
+        exit();
+    }
+}
+
+// Function to get all photos for a vehicle
+function getVehiclePhotos($conn, $vehicle_id) {
+    $sql = "SELECT photo_file_path FROM tbl_photos WHERE vehicle_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $vehicle_id);
+    $stmt->execute();
+    return $stmt->get_result();
+}
 ?>
 
 <!DOCTYPE html>
@@ -56,28 +103,85 @@ $result = $stmt->get_result();
         <div class="car-grid">
             <?php
             if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $imageSrc = $row['photo_file_path'] ? $row['photo_file_path'] : 'uploads/default_car_image.jpg';
-                    
-                    echo '<div class="car-card">
-                            <div class="car-image-container">
-                                <img src="' . htmlspecialchars($imageSrc) . '" alt="Car Image">
-                                <form class="wishlist-form" method="POST" action="buyer_dashboard.php">
-                                    <input type="hidden" name="vehicle_id" value="' . $row['vehicle_id'] . '">
-                                    <button type="submit" name="toggle_wishlist" class="wishlist-btn wishlisted">
-                                        <i class="fas fa-heart"></i>
-                                    </button>
-                                </form>
-                            </div>
-                            <div class="car-details">
-                                <h3 class="car-title">' . htmlspecialchars($row['year']) . ' ' . htmlspecialchars($row['model']) . '</h3>
-                                <p class="price">₹' . number_format($row['price']) . '</p>
-                                <div class="button-group">
-                                    <a href="test_drive.php?vehicle_id=' . $row['vehicle_id'] . '" class="test-drive-btn">Request Test Drive</a>
-                                    <a href="vehicle_details.php?id=' . $row['vehicle_id'] . '" class="details-btn">View Details</a>
+                while ($vehicle = $result->fetch_assoc()) {
+                    // Get all photos for this vehicle
+                    $photos = getVehiclePhotos($conn, $vehicle['vehicle_id']);
+                    $photo_paths = [];
+                    while ($photo = $photos->fetch_assoc()) {
+                        $photo_paths[] = $photo['photo_file_path'];
+                    }
+                    ?>
+                    <div class="car-card">
+                        <div class="car-image-container">
+                            <?php if (!empty($photo_paths)): ?>
+                                <?php foreach($photo_paths as $index => $path): ?>
+                                    <img src="<?php echo htmlspecialchars($path); ?>" 
+                                         class="vehicle-image <?php echo $index === 0 ? 'active' : ''; ?>"
+                                         alt="<?php echo htmlspecialchars($vehicle['brand'] . ' ' . $vehicle['model']); ?>">
+                                <?php endforeach; ?>
+                                
+                                <?php if (count($photo_paths) > 1): ?>
+                                    <button class="nav-btn prev">❮</button>
+                                    <button class="nav-btn next">❯</button>
+                                    <div class="image-counter">1/<?php echo count($photo_paths); ?></div>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <div class="no-image">No Image Available</div>
+                            <?php endif; ?>
+
+                            <!-- Add EV badge here -->
+                            <?php if (isset($vehicle['vehicle_type']) && $vehicle['vehicle_type'] === 'EV'): ?>
+                                <div class="ev-badge">EV</div>
+                            <?php endif; ?>
+
+                            <form class="wishlist-form" method="POST">
+                                <input type="hidden" name="vehicle_id" value="<?php echo $vehicle['vehicle_id']; ?>">
+                                <button type="submit" name="remove_vehicle" class="wishlist-btn wishlisted">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="car-details">
+                            <h3 class="car-title">
+                                <?php echo htmlspecialchars($vehicle['year']) . ' ' . 
+                                         htmlspecialchars($vehicle['brand']) . ' ' . 
+                                         htmlspecialchars($vehicle['model']); ?>
+                            </h3>
+                            <p class="price">₹<?php echo number_format($vehicle['price']); ?></p>
+                            
+                            <div class="specs-grid">
+                                <?php if (!isset($vehicle['vehicle_type']) || $vehicle['vehicle_type'] !== 'EV'): ?>
+                                    <div class="spec-item">
+                                        <span class="spec-label">Fuel Type:</span>
+                                        <span class="spec-value"><?php echo htmlspecialchars($vehicle['fuel_type']); ?></span>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="spec-item">
+                                    <span class="spec-label">Transmission:</span>
+                                    <span class="spec-value"><?php echo htmlspecialchars($vehicle['transmission']); ?></span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Mileage:</span>
+                                    <span class="spec-value"><?php echo htmlspecialchars($vehicle['mileage']); ?> km/l</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Seating Capacity:</span>
+                                    <span class="spec-value"><?php echo htmlspecialchars($vehicle['seating_capacity']); ?></span>
                                 </div>
                             </div>
-                          </div>';
+
+                            <div class="button-stack">
+                                <?php if (isset($vehicle['vehicle_type']) && $vehicle['vehicle_type'] === 'EV'): ?>
+                                    <a href="evdetails.php?id=<?php echo $vehicle['vehicle_id']; ?>" class="details-btn">View Details</a>
+                                <?php else: ?>
+                                    <a href="vehicle_details.php?id=<?php echo $vehicle['vehicle_id']; ?>" class="details-btn">View Details</a>
+                                <?php endif; ?>
+                                <a href="test_drive.php?vehicle_id=<?php echo $vehicle['vehicle_id']; ?>" class="test-drive-btn">Request Test Drive</a>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
                 }
             } else {
                 echo '<p class="no-cars">No vehicles in your wishlist yet.</p>';
@@ -153,12 +257,21 @@ $result = $stmt->get_result();
         .car-image-container {
             position: relative;
             width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background-color: #f5f5f5;
         }
 
-        .car-card img {
+        .car-image-container img {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s ease;
+        }
+
+        .car-image-container:hover img {
+            transform: scale(1.05);
         }
 
         .car-details {
@@ -194,19 +307,21 @@ $result = $stmt->get_result();
         }
 
         .wishlist-btn {
-            background: rgba(255, 255, 255, 0.9);
+            background: none;
             border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            font-size: 1.5rem;
             cursor: pointer;
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            padding: 5px;
+            transition: transform 0.2s;
+            color: #FF6B35;
         }
 
-        .wishlist-btn.wishlisted i {
-            color: #ff5722;
+        .wishlist-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .wishlist-btn.wishlisted {
+            color: #FF6B35;
         }
 
         .no-cars {
@@ -258,6 +373,53 @@ $result = $stmt->get_result();
         .nav-links a.active {
             color: #ff5722; /* Orange color for active link */
         }
+
+        .ev-details {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .ev-details p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .ev-details i {
+            width: 20px;
+            color: #FF6B35;
+            margin-right: 5px;
+        }
+
+        .wishlist-btn.wishlisted i {
+            color: #FF6B35;
+        }
+
+        .wishlist-form {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 2;
+        }
+
+        .car-image-container {
+            position: relative;
+        }
+
+        .ev-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #00bfa5;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
     </style>
 
     <script>
@@ -269,6 +431,36 @@ $result = $stmt->get_result();
             if (link.getAttribute('href') === currentPage) {
                 link.classList.add('active');
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.car-card').forEach(card => {
+                const images = card.querySelectorAll('.vehicle-image');
+                const prevBtn = card.querySelector('.prev');
+                const nextBtn = card.querySelector('.next');
+                const counter = card.querySelector('.image-counter');
+                let currentIndex = 0;
+
+                if (!images.length) return;
+
+                function updateImage(index) {
+                    images.forEach(img => img.classList.remove('active'));
+                    images[index].classList.add('active');
+                    if (counter) {
+                        counter.textContent = `${index + 1}/${images.length}`;
+                    }
+                }
+
+                prevBtn?.addEventListener('click', () => {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                    updateImage(currentIndex);
+                });
+
+                nextBtn?.addEventListener('click', () => {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    updateImage(currentIndex);
+                });
+            });
         });
     </script>
 </body>

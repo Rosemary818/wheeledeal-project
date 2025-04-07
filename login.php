@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include 'db_connect.php';
 
 // Initialize error message
 $error = '';
@@ -14,41 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Invalid email format.";
     } else {
-        // First, check in automobileusers (Admins, Sellers, Buyers)
-        $stmt = $conn->prepare("SELECT user_id, name, email, password, role FROM automobileusers WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows === 1) {
-            $user = $result->fetch_assoc();
-            $stmt->close();
-
-            if (password_verify($password, $user['password'])) {
-                $_SESSION['user_id'] = $user['user_id'];
-                $_SESSION['email'] = $user['email'];
-                $_SESSION['name'] = $user['name'];  // Store the correct name
-                $_SESSION['role'] = $user['role'];
-
-                // Redirect based on role
-                if (strpos($user['role'], 'admin') !== false) {
-                    $_SESSION['is_admin'] = 1;
-                    header("Location: admin_dashboard.php");
-                } else {
-                    $_SESSION['is_admin'] = 0;
-                    if (strpos($user['role'], 'seller') !== false) {
-                        header("Location: seller_dashboard.php");
-                    } else {
-                        header("Location: index.php");
-                    }
-                }
-                exit();
-            } else {
-                $error = "Invalid email or password.";
-            }
+        // Check in users table
+        $query = "SELECT user_id, name, email, password, role FROM tbl_users WHERE email = ?";
+        $stmt = $conn->prepare($query);
+        
+        if ($stmt === false) {
+            $error = "Database error: " . $conn->error;
         } else {
-            // If not found in automobileusers, check in automobilelogin (Buyers only)
-            $stmt = $conn->prepare("SELECT id AS user_id, email, password FROM automobilelogin WHERE email = ?");
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -58,26 +30,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->close();
 
                 if (password_verify($password, $user['password'])) {
-                    // Fetch the actual name from automobileusers
-                    $stmt = $conn->prepare("SELECT name FROM automobileusers WHERE email = ?");
-                    $stmt->bind_param("s", $email);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    
-                    if ($result->num_rows === 1) {
-                        $userData = $result->fetch_assoc();
-                        $_SESSION['name'] = $userData['name'];  // Get real name from automobileusers
-                    } else {
-                        $_SESSION['name'] = "Unknown User";  // If somehow name is missing, set a fallback value
-                    }
-                    $stmt->close();
-
+                    // Store user data in session
                     $_SESSION['user_id'] = $user['user_id'];
                     $_SESSION['email'] = $user['email'];
-                    $_SESSION['role'] = 'buyer';
-                    $_SESSION['is_admin'] = 0;
+                    $_SESSION['name'] = $user['name'];
+                    $_SESSION['role'] = $user['role'];
+                    $_SESSION['is_admin'] = ($user['role'] === 'admin') ? 1 : 0;
 
-                    header("Location: index.html");
+                    // Check if this is the user's first login
+                    $check_login = "SELECT * FROM tbl_login WHERE user_id = ?";
+                    $check_stmt = $conn->prepare($check_login);
+                    $check_stmt->bind_param("i", $user['user_id']);
+                    $check_stmt->execute();
+                    $login_result = $check_stmt->get_result();
+
+                    if ($login_result->num_rows === 0) {
+                        // First time login - store in tbl_login
+                        $login_query = "INSERT INTO tbl_login (user_id) VALUES (?)";
+                        $login_stmt = $conn->prepare($login_query);
+                        
+                        if ($login_stmt === false) {
+                            $error = "Database error: " . $conn->error;
+                        } else {
+                            $login_stmt->bind_param("i", $user['user_id']);
+                            $login_stmt->execute();
+                            $login_stmt->close();
+                        }
+                    }
+                    $check_stmt->close();
+
+                    // Redirect based on role
+                    if ($user['role'] === 'admin') {
+                        header("Location: admin_dashboard.php");
+                    } else {
+                        header("Location: index.php");
+                    }
                     exit();
                 } else {
                     $error = "Invalid email or password.";
@@ -209,7 +196,7 @@ $conn->close();
             </form>
 
             <p class="black-text">Don't have an account? <a href="signup.php">Sign Up</a></p>
-            <p><a href="forgot.html">Forgot Password?</a></p>
+            <p><a href="forgot-password.php">Forgot Password?</a></p>
         </div>
     </div>
 </body>

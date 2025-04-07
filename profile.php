@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include 'db_connect.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -16,7 +16,7 @@ $error_message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
-    $number = trim($_POST['number']);
+    $phone = trim($_POST['number']);
     $dob = trim($_POST['dob']);
     $gender = trim($_POST['gender']);
 
@@ -24,11 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->begin_transaction();
 
     try {
-        // Update automobileusers table
-        $update_users_sql = "UPDATE automobileusers SET 
+        // Update users table
+        $update_users_sql = "UPDATE tbl_users SET 
                             name = ?, 
                             email = ?, 
-                            number = ?,
+                            phone = ?,
                             dob = ?,
                             gender = ?
                             WHERE user_id = ?";
@@ -38,24 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("Error preparing users update: " . $conn->error);
         }
 
-        $stmt->bind_param("sssssi", $name, $email, $number, $dob, $gender, $user_id);
+        $stmt->bind_param("sssssi", $name, $email, $phone, $dob, $gender, $user_id);
         if (!$stmt->execute()) {
             throw new Exception("Error updating user profile: " . $stmt->error);
         }
         $stmt->close();
 
-        // Update automobilelogin table with the new email (using id as primary key)
-        $update_login_sql = "UPDATE automobilelogin SET email = ? WHERE id = ?";
-        $login_stmt = $conn->prepare($update_login_sql);
-        if (!$login_stmt) {
-            throw new Exception("Error preparing login update: " . $conn->error);
-        }
-
-        $login_stmt->bind_param("si", $email, $user_id); // Use $user_id here for matching the correct user
-        if (!$login_stmt->execute()) {
-            throw new Exception("Error updating login email: " . $login_stmt->error);
-        }
-        $login_stmt->close();
+      
 
         // If we get here, both updates succeeded
         $conn->commit();
@@ -71,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Fetch current user data from automobileusers table
-$sql = "SELECT * FROM automobileusers WHERE user_id = ?";
+$sql = "SELECT * FROM tbl_users WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -136,7 +125,7 @@ $user = $result->fetch_assoc();
                 <div class="form-group">
                     <label for="number">Phone Number</label>
                     <input type="tel" id="number" name="number" 
-                           value="<?php echo htmlspecialchars($user['number']); ?>" required>
+                           value="<?php echo htmlspecialchars($user['phone']); ?>" required>
                 </div>
 
                 <div class="form-group">

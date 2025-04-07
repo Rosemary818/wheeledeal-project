@@ -1,18 +1,23 @@
 <?php
 session_start();
-include 'db.php'; // Database connection file
+include 'db_connect.php'; // Database connection file
 
 // Get the brand from the query parameter
 $brand = isset($_GET['brand']) ? $_GET['brand'] : '';
 
 // Fetch vehicles from the database with their photos for the selected brand
-$sql = "SELECT v.vehicle_id, v.model, v.year, v.price, v.mileage, v.description, v.fuel_type, v.transmission, v.address, v.brand, 
-        vp.photo_file_name, vp.photo_file_path,
+$sql = "SELECT v.*, vs.*, 
+        GROUP_CONCAT(p.photo_file_path) as photos,
         CASE WHEN w.wishlist_id IS NOT NULL THEN 1 ELSE 0 END as is_wishlisted
-        FROM vehicle v
-        LEFT JOIN vehicle_photos vp ON v.vehicle_id = vp.vehicle_id
+        FROM tbl_vehicles v 
+        LEFT JOIN tbl_vehicle_specifications vs ON v.vehicle_id = vs.vehicle_id
+        LEFT JOIN tbl_photos p ON v.vehicle_id = p.vehicle_id
         LEFT JOIN tbl_wishlist w ON v.vehicle_id = w.vehicle_id AND w.user_id = ?
-        WHERE v.brand = ?
+        LEFT JOIN tbl_transactions t ON v.vehicle_id = t.vehicle_id AND t.status = 'completed'
+        WHERE v.brand = ? 
+        AND (v.seller_id != ? OR v.seller_id IS NULL)
+        AND t.transaction_id IS NULL
+        GROUP BY v.vehicle_id
         ORDER BY v.created_at DESC";
 $stmt = $conn->prepare($sql);
 
@@ -22,7 +27,7 @@ if ($stmt === false) {
 }
 
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
-$stmt->bind_param("is", $user_id, $brand);
+$stmt->bind_param("isi", $user_id, $brand, $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -156,21 +161,18 @@ if (isset($_POST['toggle_wishlist'])) {
                 <div class="car-grid">
                     <?php
                     if ($result->num_rows > 0) {
-                        $processed_vehicles = array();
-                        
                         while ($row = $result->fetch_assoc()) {
-                            // To avoid duplicates (since we're doing a LEFT JOIN with photos)
-                            if (in_array($row['vehicle_id'], $processed_vehicles)) {
-                                continue;
-                            }
-                            
-                            $processed_vehicles[] = $row['vehicle_id'];
-                            $imageSrc = $row['photo_file_path'] ? $row['photo_file_path'] : 'uploads/default_car_image.jpg';
+                            $photos = explode(',', $row['photos']);
+                            $mainPhoto = !empty($photos[0]) ? $photos[0] : 'uploads/default_car_image.jpg';
                             $wishlistClass = $row['is_wishlisted'] ? 'wishlisted' : '';
+                            
+                            // Check if this is an electric vehicle
+                            $isEV = isset($row['vehicle_type']) && $row['vehicle_type'] == 'EV';
                             
                             echo '<div class="car-card">
                                     <div class="car-image-container">
-                                        <img src="' . htmlspecialchars($imageSrc) . '" alt="Car Image">
+                                        <img src="' . htmlspecialchars($mainPhoto) . '" alt="Vehicle Image">
+                                        ' . ($isEV ? '<span class="ev-badge">EV</span>' : '') . '
                                         <form class="wishlist-form" method="POST">
                                             <input type="hidden" name="vehicle_id" value="' . $row['vehicle_id'] . '">
                                             <button type="submit" name="toggle_wishlist" class="wishlist-btn ' . $wishlistClass . '">
@@ -179,12 +181,17 @@ if (isset($_POST['toggle_wishlist'])) {
                                         </form>
                                     </div>
                                     <div class="car-details">
-                                        <h3 class="car-title">' . htmlspecialchars($row['year']) . ' ' . htmlspecialchars($row['model']) . '</h3>
+                                        <h3 class="car-title">' . htmlspecialchars($row['year']) . ' ' . htmlspecialchars($row['brand']) . ' ' . htmlspecialchars($row['model']) . '</h3>
                                         <p class="price">₹' . number_format($row['price']) . '</p>
                                         <div class="car-specs">
-                                            <p><i class="fas fa-tachometer-alt"></i> ' . htmlspecialchars($row['mileage']) . ' km</p>
+                                            <p><i class="fas fa-road"></i> ' . htmlspecialchars($row['kilometer']) . ' km</p>
                                             <p><i class="fas fa-gas-pump"></i> ' . htmlspecialchars($row['fuel_type']) . '</p>
                                             <p><i class="fas fa-cog"></i> ' . htmlspecialchars($row['transmission']) . '</p>
+                                        </div>
+                                        <div class="additional-specs">
+                                            <p><i class="fas fa-users"></i> ' . htmlspecialchars($row['seating_capacity']) . ' Seats</p>
+                                            <p><i class="fas fa-tachometer-alt"></i> ' . htmlspecialchars($row['mileage']) . ' km/l</p>
+                                            <p><i class="fas fa-user"></i> ' . htmlspecialchars($row['number_of_owners']) . ' Owner(s)</p>
                                         </div>
                                         <div class="button-group">
                                             <a href="test_drive.php?vehicle_id=' . $row['vehicle_id'] . '" class="test-drive-btn">Request Test Drive</a>
@@ -584,6 +591,20 @@ if (isset($_POST['toggle_wishlist'])) {
 
     .wishlist-btn:hover i {
         color: #ff5722;
+    }
+
+    .ev-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        z-index: 2;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 </style>
 

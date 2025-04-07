@@ -1,6 +1,10 @@
 <?php
 session_start();
-include 'db.php';
+include 'db_connect.php';
+
+// Add session debugging
+error_log("Session ID: " . session_id());
+error_log("Session user_id: " . ($_SESSION['user_id'] ?? 'not set'));
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -13,37 +17,87 @@ if (!isset($_GET['vehicle_id'])) {
     exit();
 }
 
-$vehicle_id = $_GET['vehicle_id'];
+$vehicle_id = $_GET['vehicle_id'] ?? null;
 $buyer_id = $_SESSION['user_id'];
 
 // Fetch vehicle details
-$sql = "SELECT v.*, vp.photo_file_path, u.name as seller_name
-        FROM vehicle v 
-        LEFT JOIN vehicle_photos vp ON v.vehicle_id = vp.vehicle_id
-        LEFT JOIN automobileusers u ON v.seller_id = u.user_id
+$sql = "SELECT v.*, p.photo_file_path, u.name as seller_name, u.email as seller_email, u.phone as seller_phone 
+        FROM tbl_vehicles v 
+        LEFT JOIN tbl_photos p ON v.vehicle_id = p.vehicle_id
+        LEFT JOIN tbl_users u ON v.seller_id = u.user_id
         WHERE v.vehicle_id = ?";
 $stmt = $conn->prepare($sql);
+if ($stmt === false) {
+    die("Prepare failed: " . $conn->error);
+}
 $stmt->bind_param("i", $vehicle_id);
+
 $stmt->execute();
 $vehicle = $stmt->get_result()->fetch_assoc();
 
-// Handle transaction submission
+// Your Razorpay Key (Use test key for development)
+$razorpayKey = "rzp_test_UCkwPwdXFEbdg0";
+
+// Set fixed amount for all vehicles
+$amount = 50000; // ₹50,000
+$razorpayAmount = $amount * 100; // Convert to paise (₹50,000 = 5000000 paise)
+
+// Variable to store transaction ID for use in JavaScript
+$transaction_id = null;
+
+// First, handle the form submission and create transaction BEFORE Razorpay initialization
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $method = $_POST['payment_method'];
-    $amount = $vehicle['price'];
+    $current_date = date('Y-m-d H:i:s');
     
-    $sql = "INSERT INTO tbl_transaction (vehicle_id, buyer_id, method, amount, payment_status) 
-            VALUES (?, ?, ?, ?, 'Pending')";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iids", $vehicle_id, $buyer_id, $method, $amount);
-    
-    if ($stmt->execute()) {
+    if ($method === 'Ready Cash') {
+        // Handle Ready Cash option
+        $sql = "INSERT INTO tbl_transactions (vehicle_id, buyer_id, method, amount, status, transaction_date) 
+                VALUES (?, ?, ?, ?, 'Pending', ?)";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("iisds", $vehicle_id, $buyer_id, $method, $amount, $current_date);
+        
+        if ($stmt->execute()) {
+            $transaction_id = $conn->insert_id;
+            error_log("Ready Cash transaction created: ID = $transaction_id");
+            
+            // Update status of the vehicle
+            $update_sql = "UPDATE tbl_vehicles SET status = 'Inactive' WHERE vehicle_id = ?";
+            $update_stmt = $conn->prepare($update_sql);
+            $update_stmt->bind_param("i", $vehicle_id);
+            $update_stmt->execute();
+            
+            header("Location: process_payment.php?transaction_id=" . $transaction_id);
+            exit();
+        } else {
+            die("Execute failed: " . $stmt->error);
+        }
+    } else {
+        // For online payments (Razorpay)
+        $order_id = 'ORD_' . time() . '_' . rand(1000, 9999);
+        
+        // Corrected column name from payment_status to status
+        $sql = "INSERT INTO tbl_transactions (vehicle_id, buyer_id, method, amount, status, transaction_date, razorpay_order_id) 
+                VALUES (?, ?, ?, ?, 'Pending', ?, ?)";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            die("Prepare failed for online payment: " . $conn->error . " SQL: " . $sql);
+        }
+        $stmt->bind_param("iisdss", $vehicle_id, $buyer_id, $method, $amount, $current_date, $order_id);
+        
+        if (!$stmt->execute()) {
+            die("Failed to insert transaction: " . $stmt->error);
+        }
+        
         $transaction_id = $conn->insert_id;
-        // Redirect to payment processing page (you can implement this later)
-        header("Location: process_payment.php?transaction_id=" . $transaction_id);
-        exit();
+        $_SESSION['current_transaction_id'] = $transaction_id;
+        error_log("Online transaction created: ID = $transaction_id, Session ID = " . session_id());
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -87,11 +141,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p class="price">₹<?php echo number_format($vehicle['price']); ?></p>
                     </div>
                 </div>
+                
+                <!-- Seller Information Section -->
+                <div class="seller-information">
+                    <h2>Seller Information</h2>
+                    <div class="seller-details">
+                        <p class="seller-name"><?php echo htmlspecialchars($vehicle['seller_name']); ?></p>
+                        <p class="seller-phone">
+                            <i class="fas fa-phone"></i>
+                            <?php echo htmlspecialchars($vehicle['seller_phone']); ?>
+                        </p>
+                        <p class="seller-email">
+                            <i class="fas fa-envelope"></i>
+                            <?php echo htmlspecialchars($vehicle['seller_email']); ?>
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <div class="payment-section">
                 <h2>Payment Details</h2>
                 <form method="POST" class="payment-form">
+                    <input type="hidden" id="stored_transaction_id" value="<?php echo $transaction_id; ?>">
                     <div class="form-group">
                         <label>Select Payment Method:</label>
                         <div class="payment-methods">
@@ -151,9 +222,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <span>Vehicle Price:</span>
                             <span>₹<?php echo number_format($vehicle['price']); ?></span>
                         </div>
+                        <div class="amount-row">
+                            <span>Booking Amount:</span>
+                            <span>₹<?php echo number_format($amount); ?></span>
+                        </div>
                         <div class="amount-row total">
-                            <span>Total Amount:</span>
-                            <span>₹<?php echo number_format($vehicle['price']); ?></span>
+                            <span>Total Amount to Pay:</span>
+                            <span>₹<?php echo number_format($amount); ?></span>
                         </div>
                     </div>
 
@@ -326,6 +401,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: 600;
             font-size: 18px;
         }
+        .seller-information {
+            margin-top: 30px;
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .seller-information h2 {
+            color: #333;
+            margin: 0 0 20px 0;
+            font-size: 20px;
+            border-bottom: 2px solid #ff5722;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .seller-details p {
+            margin: 15px 0;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .seller-details .seller-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .seller-details i {
+            color: #ff5722;
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
 
         .proceed-btn {
             width: 100%;
@@ -396,7 +506,128 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
+    // Debug console logs
+    console.log("Page loaded");
+    <?php if (isset($_SESSION['current_transaction_id'])): ?>
+    console.log("Session transaction ID: <?php echo $_SESSION['current_transaction_id']; ?>");
+    <?php endif; ?>
+    <?php if ($transaction_id): ?>
+    console.log("Direct transaction ID: <?php echo $transaction_id; ?>");
+    <?php endif; ?>
+    
+    document.querySelector('.payment-form').addEventListener('submit', function(e) {
+        const method = document.querySelector('input[name="payment_method"]:checked').value;
+        console.log("Payment method selected:", method);
+        
+        if (method !== 'Ready Cash') {
+            e.preventDefault();
+            
+            // Get stored transaction ID or create one if needed
+            let transactionId = document.getElementById('stored_transaction_id').value;
+            
+            <?php if (isset($_SESSION['current_transaction_id'])): ?>
+            // Use session transaction ID if available
+            transactionId = transactionId || "<?php echo $_SESSION['current_transaction_id']; ?>";
+            <?php endif; ?>
+            
+            console.log("Using transaction ID:", transactionId);
+            
+            if (!transactionId) {
+                // If no transaction ID is available, submit the form to create one first
+                console.log("No transaction ID found, submitting form normally");
+                this.submit();
+                return;
+            }
+            
+            var options = {
+                "key": "<?php echo $razorpayKey; ?>",
+                "amount": <?php echo $razorpayAmount; ?>,
+                "currency": "INR",
+                "name": "WheeleDeal",
+                "description": "Vehicle Booking Payment",
+                "image": "images/logo3.png",
+                "handler": function (response) {
+                    console.log("Payment success, updating database with payment ID:", response.razorpay_payment_id);
+                    
+                    // Show processing indicator
+                    document.querySelector('.proceed-btn').textContent = "Processing...";
+                    document.querySelector('.proceed-btn').disabled = true;
+                    
+                    const requestData = {
+                        payment_id: response.razorpay_payment_id,
+                        transaction_id: transactionId,
+                        vehicle_id: <?php echo $vehicle_id ?: 'null'; ?>,
+                        method: method
+                    };
+                    
+                    console.log("Sending data to update_payment.php:", JSON.stringify(requestData));
+                    
+                    fetch('update_payment.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Server response:", data);
+                        if (data.success) {
+                            window.location.href = 'payment_success.php?transaction_id=' + transactionId;
+                        } else {
+                            alert('Payment verification failed: ' + (data.message || 'Unknown error'));
+                            document.querySelector('.proceed-btn').textContent = "Proceed with Payment";
+                            document.querySelector('.proceed-btn').disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error details:', error);
+                        alert('Payment processing error. Please contact support. Error: ' + error.message);
+                        document.querySelector('.proceed-btn').textContent = "Proceed with Payment";
+                        document.querySelector('.proceed-btn').disabled = false;
+                    });
+                },
+                "prefill": {
+                    "name": "<?php echo isset($_SESSION['name']) ? htmlspecialchars($_SESSION['name']) : ''; ?>",
+                    "email": "<?php echo isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : ''; ?>",
+                    "contact": "<?php echo isset($_SESSION['phone']) ? htmlspecialchars($_SESSION['phone']) : ''; ?>"
+                },
+                "theme": {
+                    "color": "#ff5722"
+                },
+                "modal": {
+                    "ondismiss": function() {
+                        console.log("Payment modal dismissed");
+                        document.querySelector('.proceed-btn').textContent = "Proceed with Payment";
+                        document.querySelector('.proceed-btn').disabled = false;
+                    }
+                }
+            };
+            
+            document.querySelector('.proceed-btn').textContent = "Opening Payment...";
+            document.querySelector('.proceed-btn').disabled = true;
+            
+            try {
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+                console.log("Razorpay modal opened");
+            } catch (error) {
+                console.error("Razorpay error:", error);
+                alert("Payment gateway error. Please try again or choose a different payment method.");
+                document.querySelector('.proceed-btn').textContent = "Proceed with Payment";
+                document.querySelector('.proceed-btn').disabled = false;
+            }
+        }
+    });
+
+    // Show/hide Ready Cash info based on payment method selection
     document.querySelectorAll('input[name="payment_method"]').forEach(input => {
         input.addEventListener('change', function() {
             const readyCashInfo = document.getElementById('ready-cash-info');
@@ -409,4 +640,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     });
     </script>
 </body>
-</html> 
+</html>

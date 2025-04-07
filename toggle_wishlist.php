@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include 'db_connect.php';
 
 if (!isset($_SESSION['user_id']) || !isset($_POST['vehicle_id'])) {
     echo json_encode(['error' => 'Invalid request']);

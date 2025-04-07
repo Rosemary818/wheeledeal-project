@@ -1,147 +1,67 @@
 <?php
-// Database connection
-include 'db.php';
-$database_name = "automobilereselling";
+session_start();
+include 'db_connect.php';
 
-// Validate database connection
-if (!$conn) {
-    die("Database connection failed: " . mysqli_connect_error());
-}
+// Initialize form variables
+$name = '';
+$email = '';
+$phone = '';
+$dob = '';
+$gender = '';
 
-mysqli_select_db($conn, $database_name) or die("Database not found: " . mysqli_error($conn));
+$error = '';
+$success = '';
 
-// Initialize variables
-$errors = [];
-$name = $email = $dob = $gender = $phone = "";
-
-// Form submission handling
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve and sanitize form data
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
-    $confirm_password = trim($_POST['confirm_password']);
-    $dob = trim($_POST['dob']);
-    $gender = trim($_POST['gender']);
-    $phone = trim($_POST['phone']);
+    // Get and sanitize form data
+    $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
+    $phone = filter_var($_POST['phone'], FILTER_SANITIZE_STRING);
+    $dob = $_POST['dob'];
+    $gender = filter_var($_POST['gender'], FILTER_SANITIZE_STRING);
 
-    // Validation rules
-    if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
-        $errors[] = "Name can only contain letters and white spaces.";
-    }
-    if (strlen($name) < 3) {
-        $errors[] = "Name must be at least 3 characters long.";
-    }
-    if (preg_match("/\d/", $name)) {
-        $errors[] = "Name cannot contain numbers.";
-    }
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format.";
-    }
-    if (strlen($password) < 6) {
-        $errors[] = "Password must be at least 6 characters long.";
-    }
-    if ($password !== $confirm_password) {
-        $errors[] = "Passwords do not match.";
-    }
-    if (empty($dob)) {
-        $errors[] = "Date of birth is required.";
-    }
-    if (empty($gender)) {
-        $errors[] = "Gender is required.";
-    }
-    if (!preg_match("/^[6-9][0-9]{9}$/", $phone) || $phone === "0000000000" || preg_match("/^(\d)\1{9}$/", $phone)) {
-        $errors[] = "Phone number must be exactly 10 digits, start with 6, 7, 8, or 9, and cannot be all zeros or repeated digits.";
-    }
-
-    // Check if email already exists
-    if (empty($errors)) {
-        $email_check_query = "SELECT * FROM automobilelogin WHERE email = ?";
-        $stmt = mysqli_prepare($conn, $email_check_query);
-
-        if ($stmt === false) {
-            $errors[] = "Database preparation error: " . mysqli_error($conn);
-        } else {
-            mysqli_stmt_bind_param($stmt, "s", $email);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-
-            if (mysqli_num_rows($result) > 0) {
-                $errors[] = "Email already exists.";
-            }
-            mysqli_stmt_close($stmt);
-        }
-    }
-
-    // If no errors, proceed with database insertion
-    if (empty($errors)) {
-        // Hash the password for security
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-        // Start transaction
-        mysqli_begin_transaction($conn);
-
-        try {
-            // Insert data into `automobileusers` table
-            $sql_automobileusers = "INSERT INTO automobileusers (name, email, number, password, dob, gender, role) 
-            VALUES (?, ?, ?, ?, ?, ?, 'buyer')";
-
-            $stmt_automobileusers = mysqli_prepare($conn, $sql_automobileusers);
-            mysqli_stmt_bind_param($stmt_automobileusers, "ssssss", $name, $email, $phone, $hashed_password, $dob, $gender);
-            mysqli_stmt_execute($stmt_automobileusers);
-            mysqli_stmt_close($stmt_automobileusers);
-
-            // Insert email and password into `automobilelogin` table
-            $sql_automobilelogin = "INSERT INTO automobilelogin (email, password) VALUES (?, ?)";
-            $stmt_automobilelogin = mysqli_prepare($conn, $sql_automobilelogin);
-            mysqli_stmt_bind_param($stmt_automobilelogin, "ss", $email, $hashed_password);
-            mysqli_stmt_execute($stmt_automobilelogin);
-            mysqli_stmt_close($stmt_automobilelogin);
-
-            // Commit transaction
-            mysqli_commit($conn);
-
-            // Redirect to login page on successful registration
-            header("Location: login.php");
-            exit();
-        } catch (Exception $e) {
-            mysqli_rollback($conn);
-            $errors[] = "Registration failed. Please try again.";
-        }
-    }
-}
-
-session_start(); // Start the session
-
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
-
-    // Query to check if the user exists
-    $query = "SELECT * FROM automobilelogin WHERE email = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "s", $email);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if ($result && mysqli_num_rows($result) > 0) {
-        $user = mysqli_fetch_assoc($result);
-        // Verify the password
-        if (password_verify($password, $user['password'])) {
-            // Store user name in session
-            $_SESSION['user_name'] = $user['name']; // Assuming 'name' is a column in your users table
-            header("Location: index.php"); // Redirect to index page
-            exit();
-        } else {
-            $error = "Invalid password.";
-        }
+    // Validation
+    if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($dob) || empty($gender)) {
+        $error = "Please fill in all fields.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Invalid email format.";
+    } elseif ($password !== $confirm_password) {
+        $error = "Passwords do not match.";
+    } elseif (strlen($password) < 6) {
+        $error = "Password must be at least 6 characters long.";
     } else {
-        $error = "No user found with that email.";
+        // Check if email already exists
+        $stmt = $conn->prepare("SELECT user_id FROM tbl_users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $error = "Email already registered.";
+        } else {
+            // Hash password
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            
+            // Insert new user
+            $stmt = $conn->prepare("INSERT INTO tbl_users (name, email, password, phone, dob, gender, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, 'user', NOW(), NOW())");
+            $stmt->bind_param("ssssss", $name, $email, $hashed_password, $phone, $dob, $gender);
+            
+            if ($stmt->execute()) {
+                $success = "Registration successful! Please login.";
+                // Redirect to login page after 2 seconds
+                header("refresh:2;url=login.php");
+            } else {
+                $error = "Registration failed. Please try again.";
+            }
+        }
+        $stmt->close();
     }
 }
-?>
 
+$conn->close();
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -271,6 +191,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
+        function validateName() {
+            const nameField = document.querySelector('input[name="name"]');
+            const errorElement = document.getElementById('name-error');
+            const nameValue = nameField.value;
+
+            // Regular expression to validate the name
+            const nameRegex = /^[A-Za-z][A-Za-z\s]*$/; // Starts with a letter and allows letters and spaces only
+
+            if (nameValue.trim() === '') {
+                errorElement.textContent = "Name cannot be empty.";
+            } else if (!nameRegex.test(nameValue)) {
+                errorElement.textContent = "Name must start with a letter and can only contain letters and spaces.";
+            } else {
+                errorElement.textContent = ''; // Clear error message
+            }
+        }
+
+        function validateEmail() {
+            const emailField = document.querySelector('input[name="email"]');
+            const errorElement = document.getElementById('email-error');
+            const emailValue = emailField.value.toLowerCase(); // Convert to lowercase
+
+            // Regular expression to validate the email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (emailValue.trim() === '') {
+                errorElement.textContent = "Email cannot be empty.";
+            } else if (!emailRegex.test(emailValue)) {
+                errorElement.textContent = "Please enter a valid email address.";
+            } else {
+                errorElement.textContent = ''; // Clear error message
+            }
+
+            // Update the email field to be lowercase
+            emailField.value = emailValue;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const nameField = document.querySelector('input[name="name"]');
             const emailField = document.querySelector('input[name="email"]');
@@ -280,19 +237,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             const dobField = document.querySelector('input[name="dob"]');
             const genderField = document.querySelector('select[name="gender"]');
 
-            nameField.addEventListener('input', function() {
-                if (nameField.value.length < 3) {
-                    document.getElementById('name-error').textContent = "Name must be at least 3 characters long.";
-                } else if (/\d/.test(nameField.value)) {
-                    document.getElementById('name-error').textContent = "Name cannot contain numbers.";
-                } else {
-                    document.getElementById('name-error').textContent = '';
-                }
-            });
-
-            emailField.addEventListener('input', function() {
-                validateField(emailField, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format.");
-            });
+            nameField.addEventListener('input', validateName);
+            emailField.addEventListener('input', validateEmail);
 
             passwordField.addEventListener('input', function() {
                 if (passwordField.value.length < 6) {
@@ -359,11 +305,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             ?>
             <form action="" method="POST">
-                <input type="text" name="name" placeholder="Full Name" required 
-                       value="<?php echo htmlspecialchars($name); ?>">
+                <input type="text" name="name" placeholder="Full Name" required>
                 <div id="name-error" class="error-message"></div>
-                <input type="email" name="email" placeholder="Email Address" required
-                       value="<?php echo htmlspecialchars($email); ?>">
+                <input type="email" name="email" placeholder="Email Address" required>
                 <div id="email-error" class="error-message"></div>
                 <input type="password" name="password" placeholder="Password" required>
                 <div id="password-error" class="error-message"></div>

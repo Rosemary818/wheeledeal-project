@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include 'db_connect.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -9,22 +9,46 @@ if (!isset($_SESSION['user_id'])) {
 
 $buyer_id = $_SESSION['user_id'];
 
-// Fetch all test drive requests for this buyer
+// Fetch all test drive requests for this buyer - updated to use testdrive_id
 $sql = "SELECT td.*, 
         v.model as vehicle_model, v.year as vehicle_year, v.price as vehicle_price,
-        s.name as seller_name, s.number as seller_phone, s.email as seller_email,
+        s.name as seller_name, s.phone as seller_phone, s.email as seller_email,
         td.testdrive_id
-        FROM tbl_testdrive td
-        JOIN vehicle v ON td.vehicle_id = v.vehicle_id
-        JOIN automobileusers s ON td.seller_id = s.user_id
+        FROM tbl_test_drives td
+        JOIN tbl_vehicles v ON td.vehicle_id = v.vehicle_id
+        JOIN tbl_users s ON td.seller_id = s.user_id
         WHERE td.buyer_id = ?
         ORDER BY td.requested_date DESC, td.requested_time DESC";
 
 $stmt = $conn->prepare($sql);
+if (!$stmt) {
+    die("Prepare failed: " . $conn->error);
+}
+
 $stmt->bind_param("i", $buyer_id);
-$stmt->execute();
+if (!$stmt->execute()) {
+    die("Execute failed: " . $stmt->error);
+}
 $result = $stmt->get_result();
-?>
+
+// Add this at the top of the file to display messages
+if (isset($_SESSION['success_message'])): ?>
+    <div class="alert success">
+        <?php 
+        echo $_SESSION['success_message'];
+        unset($_SESSION['success_message']);
+        ?>
+    </div>
+<?php endif; ?>
+
+<?php if (isset($_SESSION['error_message'])): ?>
+    <div class="alert error">
+        <?php 
+        echo $_SESSION['error_message'];
+        unset($_SESSION['error_message']);
+        ?>
+    </div>
+<?php endif; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -76,11 +100,11 @@ $result = $stmt->get_result();
                                 <?php if ($request['status'] == 'Rescheduled'): ?>
                                     <div class="reschedule-info">
                                         <h4>Seller's Suggested Schedule:</h4>
-                                        <p>Date: <?php echo date('d M Y', strtotime($request['suggested_date'])); ?></p>
-                                        <p>Time: <?php echo date('h:i A', strtotime($request['suggested_time'])); ?></p>
+                                        <p>New Date: <?php echo date('d M Y', strtotime($request['rescheduled_date'])); ?></p>
+                                        <p>New Time: <?php echo date('h:i A', strtotime($request['rescheduled_time'])); ?></p>
                                         <p class="seller-message">
                                             <strong>Message from Seller:</strong><br>
-                                            <?php echo nl2br(htmlspecialchars($request['seller_message'])); ?>
+                                            <?php echo htmlspecialchars($request['seller_message'] ?? 'No message provided.'); ?>
                                         </p>
                                         <div class="reschedule-actions">
                                             <button onclick="acceptReschedule(<?php echo $request['testdrive_id']; ?>)" class="accept-btn">
@@ -103,9 +127,10 @@ $result = $stmt->get_result();
                             </div>
                         </div>
                         <div class="action-buttons">
-                            <a href="vehicle_details.php?id=<?php echo $request['vehicle_id']; ?>" class="view-details-btn">View Vehicle Details</a>
-                            <?php if ($request['status'] == 'Pending'): ?>
-                                <?php echo "<!-- Debug: testdrive_id = " . $request['testdrive_id'] . " -->"; ?>
+                            <a href="vehicle_details.php?id=<?php echo $request['vehicle_id']; ?>" class="view-details-btn">
+                                View Vehicle Details
+                            </a>
+                            <?php if ($request['status'] == 'Pending' || $request['status'] == 'Confirmed'): ?>
                                 <button onclick="confirmCancel(<?php echo $request['testdrive_id']; ?>)" class="cancel-btn">
                                     <i class="fas fa-times"></i> Cancel Request
                                 </button>
@@ -346,6 +371,35 @@ $result = $stmt->get_result();
         background-color: #fff3cd;
         color: #856404;
     }
+
+    .alert {
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .cancel-btn i {
+        font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+        .action-buttons {
+            flex-direction: column;
+        }
+    }
 </style>
 
 <script>
@@ -379,4 +433,4 @@ $result = $stmt->get_result();
 </script>
 
 </body>
-</html> 
+</html>

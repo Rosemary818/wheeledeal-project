@@ -1,22 +1,28 @@
 <?php
 session_start();
-session_unset(); // Unset all session variables
+include 'db_connect.php';
+
+// Store logout time in tbl_login if user was logged in
+if (isset($_SESSION['user_id'])) {
+    $query = "INSERT INTO tbl_login (user_id, login_time) VALUES (?, NOW())";
+    $stmt = $conn->prepare($query);
+    
+    if ($stmt === false) {
+        // Log the error but continue with logout
+        error_log("Database error during logout: " . $conn->error);
+    } else {
+        $stmt->bind_param("i", $_SESSION['user_id']);
+        $stmt->execute();
+        $stmt->close();
+    }
+}
+
+// Destroy all session data
 session_destroy();
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
 
-// If logout is requested
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    session_unset(); // Unset all session variables
-    session_destroy(); // Destroy the session
-
-    // Redirect to the login page
-    header("Location: index.php");
-    exit();
-}
+// Redirect to login page
+header("Location: login.php");
+exit();
 ?>
 
 <!DOCTYPE html>

@@ -1,62 +1,57 @@
 <?php
 session_start();
-date_default_timezone_set('Asia/Kolkata'); // Set timezone explicitly
+date_default_timezone_set('Asia/Kolkata');
 
-include 'db.php';
+include 'db_connect.php';
 
+// Initialize variables
 $error = '';
 $success = '';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
-    $token = $_GET['token'];
+// Get token from URL
+$token = isset($_GET['token']) ? $_GET['token'] : '';
 
-    // Debugging token retrieval
-   // echo "<p>Debug: Token received - $token</p>";
-    //echo "<p>Debug: Current PHP Time - " . date('Y-m-d H:i:s') . "</p>";
-
-    // Basic validation
-    if (empty($password) || empty($confirm_password)) {
-        $error = "Please fill in all fields.";
-    } elseif ($password !== $confirm_password) {
-        $error = "Passwords do not match.";
-    } else {
-        // Fetch token details for debugging
-        $stmt = $conn->prepare("SELECT reset_token, token_expiry FROM automobilelogin WHERE reset_token = ?");
-        $stmt->bind_param("s", $token);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows === 1) {
-            $row = $result->fetch_assoc();
-            $token_expiry = new DateTime($row['token_expiry']);
-            $current_time = new DateTime();
-
-            //echo "<p>Debug: Token Expiry - " . $row['token_expiry'] . "</p>";
-
-            // Check if the token is still valid
-            if ($current_time > $token_expiry) {
-                $error = "Invalid or expired token.";
+// Verify token exists in database
+if (!empty($token)) {
+    $check = $conn->query("SELECT user_id FROM tbl_login WHERE reset_token = '" . 
+                         $conn->real_escape_string($token) . "' LIMIT 1");
+    
+    if ($check && $check->num_rows > 0) {
+        $user = $check->fetch_assoc();
+        $user_id = $user['user_id'];
+        
+        // Process form submission
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $password = $_POST['password'];
+            $confirm = $_POST['confirm_password'];
+            
+            if ($password === $confirm) {
+                // Hash the password
+                $hashed = password_hash($password, PASSWORD_DEFAULT);
+                
+                // Update password
+                $update_pw = $conn->query("UPDATE tbl_users SET password = '" . 
+                                       $conn->real_escape_string($hashed) . "' WHERE user_id = " . (int)$user_id);
+                                       
+                // Clear the token
+                $clear_token = $conn->query("UPDATE tbl_login SET reset_token = NULL, token_expiry = NULL 
+                                          WHERE user_id = " . (int)$user_id);
+                
+                if ($update_pw && $clear_token) {
+                    $success = "Password updated successfully!";
+                } else {
+                    $error = "Error updating password: " . $conn->error;
+                }
             } else {
-                // Token is valid, update password
-                $new_password = password_hash($password, PASSWORD_BCRYPT);
-                $update_stmt = $conn->prepare("UPDATE automobilelogin SET password = ?, reset_token = NULL, token_expiry = NULL WHERE reset_token = ?");
-                $update_stmt->bind_param("ss", $new_password, $token);
-                $update_stmt->execute();
-
-                $success = "Password has been reset successfully.";
-                // You can now <a href='login.php'>log in</a> with your new password.";
+                $error = "Passwords do not match";
             }
-        } else {
-            $error = "Invalid or expired token.";
         }
-
-        $stmt->close();
+    } else {
+        $error = "Invalid or expired token. Please request a new password reset link.";
     }
+} else {
+    $error = "No token provided";
 }
-
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -76,7 +71,7 @@ $conn->close();
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             padding: 20px;
             background-color: #f7f4f1;
         }
@@ -111,6 +106,7 @@ $conn->close();
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         .reset-card button:hover {
             background-color: #e63f15;
@@ -120,8 +116,10 @@ $conn->close();
             font-size: 14px;
             color: #555;
         }
-        .reset-card .black-text {
+        .black-text {
             color: #000;
+            font-size: 16px;
+            margin-bottom: 15px;
         }
         .logo {
             margin-bottom: 20px;
@@ -130,12 +128,54 @@ $conn->close();
             height: 60px;
         }
         .error {
-            color: red;
+            color: #e74c3c;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #fdecea;
+            border-radius: 5px;
+            border-left: 4px solid #e74c3c;
+            text-align: left;
+        }
+        .success-box {
+            color: #2ecc71;
+            background-color: #e8f8f5;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #2ecc71;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        .success-box h3 {
+            color: #27ae60;
+            margin-top: 0;
             margin-bottom: 10px;
         }
-        .success {
-            color: green;
-            margin-bottom: 10px;
+        .success-box p {
+            color: #333;
+            margin-bottom: 0;
+        }
+        .login-button {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            margin-top: 10px;
+            background-color: #ff471a;
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 5px;
+        }
+        .login-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .login-link:hover {
+            text-decoration: underline;
+        }
+        .divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 20px 0;
         }
     </style>
 </head>
@@ -147,21 +187,29 @@ $conn->close();
             </div>
             <h2>Reset Your Password</h2>
 
-            <?php if (!empty($error)) { ?>
-                <p class="error"><?php echo htmlspecialchars($error); ?></p>
-            <?php } ?>
+            <?php if (!empty($error)): ?>
+                <p class="error"><?php echo $error; ?></p>
+            <?php endif; ?>
 
-            <?php if (!empty($success)) { ?>
-                <p class="success"><?php echo htmlspecialchars($success); ?></p>
-            <?php } ?>
-
-            <form action="" method="POST">
-                <input type="password" name="password" placeholder="New Password" required>
-                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
-                <button type="submit">Reset Password</button>
-            </form>
-
-            <p class="black-text">Remembered your password? <a href="login.php">Log In</a></p>
+            <?php if (!empty($success)): ?>
+                <div class="success-box">
+                    <h3>Success!</h3>
+                    <p><?php echo $success; ?> You can now log in with your new password.</p>
+                </div>
+                <div class="login-section">
+                    <a href="login.php" class="login-button">Log In Now</a>
+                </div>
+            <?php else: ?>
+                <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="POST">
+                    <input type="password" name="password" placeholder="New Password" required>
+                    <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                    <button type="submit">Reset Password</button>
+                </form>
+                
+                <div class="divider"></div>
+                
+                <p class="black-text">Remembered your password? <a href="login.php" class="login-link">Log In</a></p>
+            <?php endif; ?>
         </div>
     </div>
 </body>

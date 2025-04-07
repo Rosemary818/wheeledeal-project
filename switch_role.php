@@ -7,12 +7,12 @@ $user_id = $_SESSION['user_id']; // This should be set during login
 // Check if the form is submitted and the role is 'seller' or 'buyer'
 if (isset($_POST['role'])) {
     // Include your database connection file
-    require_once 'db.php';
+    require_once 'db_connect.php';
 
     // Determine if the role is 'seller' or 'buyer' and set the appropriate query
     if ($_POST['role'] == 'seller') {
         // Update the user's role to 'seller'
-        $query = "UPDATE automobileusers SET role = 'seller' WHERE user_id = ?";
+        $query = "UPDATE tbl_users SET role = 'seller' WHERE user_id = ?";
         $stmt = $conn->prepare($query);
 
         if ($stmt === false) {
@@ -31,7 +31,7 @@ if (isset($_POST['role'])) {
     }
     elseif ($_POST['role'] == 'buyer') {
         // Update the user's role to 'buyer'
-        $query = "UPDATE automobileusers SET role = 'buyer' WHERE user_id = ?";
+        $query = "UPDATE tbl_users SET role = 'buyer' WHERE user_id = ?";
         $stmt = $conn->prepare($query);
 
         if ($stmt === false) {

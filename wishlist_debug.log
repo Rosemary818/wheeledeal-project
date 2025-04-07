@@ -1,0 +1,1215 @@
+Wishlist update requested at 2025-03-31 07:27:20
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:20
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:20
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:20
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:22
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:22
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:22
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:22
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:23
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:23
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:23
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:23
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:23
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:23
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:23
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:23
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:23
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:23
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:23
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:23
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:23
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:23
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:23
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:23
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:27
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:27
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:27
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:27
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:27
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:27
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:27
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:27
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:28
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:28
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:28
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:28
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:28
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:28
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:28
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:28
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:28
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:28
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:28
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:28
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:29
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:29
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:29
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:29
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:29
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:29
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:29
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:29
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:29
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:29
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:27:29
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:27:29
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:28:06
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:28:06
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:28:06
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:28:06
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:28:07
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:28:07
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:28:07
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:28:07
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:28:49
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:28:49
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:30:34
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:30:34
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:30:34
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:30:34
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:31:30
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:31:30
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-03-31 07:31:30
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-03-31 07:31:30
+Success: true
+Inserted ID: 16
+Wishlist update requested at 2025-03-31 07:31:44
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:31:44
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Wishlist update requested at 2025-03-31 07:31:44
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:31:44
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-03-31 07:31:44
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-03-31 07:33:57
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:33:57
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-03-31 07:33:57
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-03-31 07:33:57
+Success: true
+Inserted ID: 17
+Wishlist update requested at 2025-03-31 07:33:57
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:33:57
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-03-31 07:33:57
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-03-31 07:33:58
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:33:58
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-03-31 07:33:58
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-03-31 07:33:58
+Success: true
+Inserted ID: 18
+Wishlist update requested at 2025-03-31 07:33:58
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:33:58
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-03-31 07:33:58
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-03-31 07:33:58
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:33:58
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-03-31 07:33:58
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-03-31 07:33:58
+Success: true
+Inserted ID: 19
+Wishlist update requested at 2025-03-31 07:33:58
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:33:58
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-03-31 07:33:58
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-03-31 07:33:59
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:33:59
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-03-31 07:33:59
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-03-31 07:33:59
+Success: true
+Inserted ID: 20
+Wishlist update requested at 2025-03-31 07:33:59
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:33:59
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-03-31 07:33:59
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-03-31 07:34:04
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:34:04
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:34:04
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:34:04
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-03-31 07:34:04
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-03-31 07:34:04
+Success: true
+Inserted ID: 21
+Wishlist update requested at 2025-03-31 07:34:05
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:34:05
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Wishlist update requested at 2025-03-31 07:34:05
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:34:05
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-03-31 07:34:05
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-03-31 07:34:07
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:34:07
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:34:07
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:34:07
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-03-31 07:34:07
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-03-31 07:34:07
+Success: true
+Inserted ID: 22
+Wishlist update requested at 2025-03-31 07:35:25
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:25
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-03-31 07:35:25
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-03-31 07:35:25
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:25
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-03-31 07:35:25
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-03-31 07:35:25
+Success: true
+Inserted ID: 23
+Wishlist update requested at 2025-03-31 07:35:26
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:26
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-03-31 07:35:26
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-03-31 07:35:26
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:26
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-03-31 07:35:26
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-03-31 07:35:26
+Success: true
+Inserted ID: 24
+Wishlist update requested at 2025-03-31 07:35:27
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:27
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-03-31 07:35:27
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-03-31 07:35:27
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:27
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-03-31 07:35:27
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-03-31 07:35:27
+Success: true
+Inserted ID: 25
+Wishlist update requested at 2025-03-31 07:35:27
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:27
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-03-31 07:35:27
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-03-31 07:35:27
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:27
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-03-31 07:35:27
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-03-31 07:35:27
+Success: true
+Inserted ID: 26
+Wishlist update requested at 2025-03-31 07:35:28
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:28
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 0
+Insert attempt at 2025-03-31 07:35:28
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=10, timestamp=2025-03-31 07:35:28
+Success: true
+Inserted ID: 27
+Wishlist update requested at 2025-03-31 07:35:28
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:28
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 1
+Delete attempt at 2025-03-31 07:35:28
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Success: true
+Wishlist update requested at 2025-03-31 07:35:28
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:28
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 0
+Insert attempt at 2025-03-31 07:35:28
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=10, timestamp=2025-03-31 07:35:28
+Success: true
+Inserted ID: 28
+Wishlist update requested at 2025-03-31 07:35:28
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:28
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 1
+Delete attempt at 2025-03-31 07:35:28
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Success: true
+Wishlist update requested at 2025-03-31 07:35:29
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:29
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 0
+Insert attempt at 2025-03-31 07:35:29
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=10, timestamp=2025-03-31 07:35:29
+Success: true
+Inserted ID: 29
+Wishlist update requested at 2025-03-31 07:35:29
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:29
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 1
+Delete attempt at 2025-03-31 07:35:29
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Success: true
+Wishlist update requested at 2025-03-31 07:35:29
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:29
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 0
+Insert attempt at 2025-03-31 07:35:29
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=10, timestamp=2025-03-31 07:35:29
+Success: true
+Inserted ID: 30
+Wishlist update requested at 2025-03-31 07:35:29
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:35:29
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 1
+Delete attempt at 2025-03-31 07:35:29
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Success: true
+Wishlist update requested at 2025-03-31 07:36:10
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:36:10
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-03-31 07:36:10
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-03-31 07:36:10
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:36:10
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Wishlist update requested at 2025-03-31 07:36:11
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:36:11
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 0
+Insert attempt at 2025-03-31 07:36:11
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=10, timestamp=2025-03-31 07:36:11
+Success: true
+Inserted ID: 31
+Wishlist update requested at 2025-03-31 07:36:11
+POST data: Array
+(
+    [vehicle_id] => 10
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:36:11
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=10
+Result rows: 1
+Wishlist update requested at 2025-03-31 07:36:18
+POST data: Array
+(
+    [vehicle_id] => 9
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:36:18
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=9
+Result rows: 0
+Insert attempt at 2025-03-31 07:36:18
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=9, timestamp=2025-03-31 07:36:18
+Success: true
+Inserted ID: 32
+Wishlist update requested at 2025-03-31 07:36:18
+POST data: Array
+(
+    [vehicle_id] => 9
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-03-31 07:36:18
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=9
+Result rows: 1
+Wishlist update requested at 2025-04-01 09:34:32
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-04-01 09:34:32
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-04-01 09:34:32
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=11, timestamp=2025-04-01 09:34:32
+Success: true
+Inserted ID: 33
+Wishlist update requested at 2025-04-01 09:34:32
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-04-01 09:34:32
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=11
+Result rows: 1
+Wishlist update requested at 2025-04-03 12:34:05
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 2
+Database check at 2025-04-03 12:34:05
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=2, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-04-03 12:34:05
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=2, vehicle_id=11, timestamp=2025-04-03 12:34:05
+Success: true
+Inserted ID: 36
+Wishlist update requested at 2025-04-03 12:34:05
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 2
+Database check at 2025-04-03 12:34:05
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=2, vehicle_id=11
+Result rows: 1
+Wishlist update requested at 2025-04-03 12:34:07
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => remove
+)
+
+Session user_id: 2
+Database check at 2025-04-03 12:34:07
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=2, vehicle_id=11
+Result rows: 1
+Delete attempt at 2025-04-03 12:34:07
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=2, vehicle_id=11
+Success: true
+Wishlist update requested at 2025-04-03 12:34:07
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 2
+Database check at 2025-04-03 12:34:07
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=2, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-04-03 12:34:07
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=2, vehicle_id=11, timestamp=2025-04-03 12:34:07
+Success: true
+Inserted ID: 37
+Wishlist update requested at 2025-04-03 12:34:10
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 2
+Database check at 2025-04-03 12:34:10
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=2, vehicle_id=11
+Result rows: 1
+Wishlist update requested at 2025-04-03 12:35:42
+POST data: Array
+(
+    [vehicle_id] => 11
+    [action] => add
+)
+
+Session user_id: 2
+Database check at 2025-04-03 12:35:42
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=2, vehicle_id=11
+Result rows: 0
+Insert attempt at 2025-04-03 12:35:42
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=2, vehicle_id=11, timestamp=2025-04-03 12:35:42
+Success: true
+Inserted ID: 38
+Wishlist update requested at 2025-04-07 15:35:22
+POST data: Array
+(
+    [vehicle_id] => 35
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-04-07 15:35:22
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=35
+Result rows: 0
+Insert attempt at 2025-04-07 15:35:22
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=35, timestamp=2025-04-07 15:35:22
+Success: true
+Inserted ID: 39
+Wishlist update requested at 2025-04-07 15:35:22
+POST data: Array
+(
+    [vehicle_id] => 35
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-04-07 15:35:22
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=35
+Result rows: 1
+Wishlist update requested at 2025-04-07 15:35:22
+POST data: Array
+(
+    [vehicle_id] => 35
+    [action] => remove
+)
+
+Session user_id: 4
+Database check at 2025-04-07 15:35:22
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=35
+Result rows: 1
+Delete attempt at 2025-04-07 15:35:22
+SQL: DELETE FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=35
+Success: true
+Wishlist update requested at 2025-04-07 15:35:22
+POST data: Array
+(
+    [vehicle_id] => 35
+    [action] => add
+)
+
+Session user_id: 4
+Database check at 2025-04-07 15:35:22
+SQL check: SELECT wishlist_id FROM tbl_wishlist WHERE user_id = ? AND vehicle_id = ?
+Params: user_id=4, vehicle_id=35
+Result rows: 0
+Insert attempt at 2025-04-07 15:35:22
+SQL: INSERT INTO tbl_wishlist (user_id, vehicle_id, added_at) VALUES (?, ?, ?)
+Params: user_id=4, vehicle_id=35, timestamp=2025-04-07 15:35:22
+Success: true
+Inserted ID: 40

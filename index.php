@@ -1,6 +1,6 @@
 <?php
 session_start(); // Start the session
-include 'db.php'; // Ensure this file contains the database connection
+include 'db_connect.php'; // Ensure this file contains the database connection
 
 // Check if the connection was successful
 if (!$conn) {
@@ -75,10 +75,11 @@ if (!$conn) {
             display: flex;
             align-items: center;
             width: 40%;
+            position: relative;
         }
     
         .search-container input {
-            width: 100%;
+            width: 300%;
             padding: 10px 15px; /* Increased padding */
             border: 1px solid #ddd;
             border-radius: 20px;
@@ -296,7 +297,7 @@ if (!$conn) {
             max-width: 60px; /* Increased size */
             margin-bottom: 8px; /* Increased margin */
         }
-
+        
         
     
   /* Why choose */
@@ -496,6 +497,32 @@ if (!$conn) {
         .username {
             cursor: pointer;
         }
+
+        /* Add these styles to your existing CSS */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .search-result-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .search-result-item:hover {
+            background-color: #f5f5f5;
+        }
     </style>
     
     <script>
@@ -515,6 +542,53 @@ if (!$conn) {
                 }
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            let timeoutId;
+
+            searchInput.addEventListener('input', function() {
+                clearTimeout(timeoutId);
+                const query = this.value;
+
+                if (query.length < 2) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+
+                // Add debounce to prevent too many requests
+                timeoutId = setTimeout(() => {
+                    fetch(`search_ajax.php?query=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            searchResults.innerHTML = '';
+                            if (data.length > 0) {
+                                data.forEach(item => {
+                                    const div = document.createElement('div');
+                                    div.className = 'search-result-item';
+                                    div.textContent = `${item.brand} ${item.model} - ${item.year}`;
+                                    div.addEventListener('click', () => {
+                                        window.location.href = `vehicle_details.php?id=${item.vehicle_id}`;
+                                    });
+                                    searchResults.appendChild(div);
+                                });
+                                searchResults.style.display = 'block';
+                            } else {
+                                searchResults.style.display = 'none';
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                }, 300);
+            });
+
+            // Hide search results when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        });
     </script>
 </head>
 <body>
@@ -527,10 +601,13 @@ if (!$conn) {
 
         <!-- Search bar -->
         <div class="search-container">
-            <input type="text" placeholder="Search Cars or Brands e.g., Swift, Maruti">
-            <button>
-                <img src="images/search.png" alt="Search">
-            </button>
+            <form action="search.php" method="GET" id="searchForm">
+                <input type="text" name="query" id="searchInput" placeholder="Search Cars or Brands e.g., Swift, Maruti">
+                <button type="submit">
+                    <!-- <img src="images/search.png" alt="Search"> -->
+                </button>
+            </form>
+            <div id="searchResults" class="search-results"></div>
         </div>
 
         <!-- Navigation -->
@@ -591,7 +668,7 @@ if (!$conn) {
             <div class="brand-list">
                 <?php
                 // Fetch brands from the database
-                $sql = "SELECT DISTINCT brand FROM vehicle"; // Ensure 'brand' is the correct column name
+                $sql = "SELECT DISTINCT brand FROM tbl_vehicles"; // Ensure 'brand' is the correct column name
                 $result = $conn->query($sql);
 
                 // Check if the query was successful
@@ -601,7 +678,9 @@ if (!$conn) {
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             $brand = htmlspecialchars($row['brand']);
-                            echo "<a href='brand_vehicles.php?brand=$brand'>$brand</a><br>";
+                            if (!empty($brand)) { // Ensure it's not empty
+                                echo "<a href='brand_vehicles.php?brand=$brand' class='brand-box'>$brand</a>";
+                            }
                         }
                     } else {
                         echo "No brands found.";
@@ -697,13 +776,13 @@ if (!$conn) {
                 <p>Phone: +1 (123) 456-7890</p>
             </div>
             <div class="footer-section">
-                <h3>Follow Us</h3>
+                <!-- <h3>Follow Us</h3>
                 <div class="social-icons">
-                    <a href="#" target="_blank"><img src="images/facebook.png" alt="Facebook"></a>
+                    <a href="#" target="_blank"><img src="images/facebook.jpg" alt="Facebook"></a>
                     <a href="#" target="_blank"><img src="images/twitter.png" alt="Twitter"></a>
                     <a href="#" target="_blank"><img src="images/instagram.png" alt="Instagram"></a>
-                    <a href="#" target="_blank"><img src="images/linkedin.png" alt="LinkedIn"></a>
-                </div>
+                    <a href="#" target="_blank"><img src="images/linked.png" alt="LinkedIn"></a>
+                </div> -->
             </div>
         </div>
         <div class="footer-bottom">
