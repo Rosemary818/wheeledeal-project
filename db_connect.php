@@ -1,8 +1,8 @@
 <?php
-$host = "localhost"; // Change if using a different host
-$dbname = "wheeledeal_db"; // Your database name
-$username = "root"; // Change if using a different MySQL user
-$password = ""; // Change if using a password
+$host = getenv("DB_HOST");
+$dbname = getenv("DB_NAME");
+$username = getenv("DB_USER");
+$password = getenv("DB_PASSWORD");
 
 // Create connection
 $conn = new mysqli($host, $username, $password, $dbname);
@@ -12,7 +12,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Set charset to UTF-8 (optional, but recommended)
+// Set charset to UTF-8
 $conn->set_charset("utf8");
-
 ?>
