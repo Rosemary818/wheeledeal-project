@@ -1,8 +1,8 @@
 <?php
-$host = getenv("DB_HOST");
-$dbname = getenv("DB_NAME");
-$username = getenv("DB_USER");
-$password = getenv("DB_PASSWORD");
+$host = getenv("dpg-cvpvbphr0fns73894490-a");
+$dbname = getenv("wheeledeal_db");
+$username = getenv("wheeledeal_db_user");
+$password = getenv("5F5ibmaatqHGXob4HrQu2yr3QLaVzCVt");
 
 // Create connection
 $conn = new mysqli($host, $username, $password, $dbname);
