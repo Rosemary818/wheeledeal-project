@@ -14,13 +14,13 @@ $success = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get and sanitize form data
-    $name = filter_var($_POST['name'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
     $phone = filter_var($_POST['phone'], FILTER_SANITIZE_STRING);
     $dob = $_POST['dob'];
-    $gender = filter_var($_POST['gender'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $gender = filter_var($_POST['gender'], FILTER_SANITIZE_STRING);
 
     // Validation
     if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($dob) || empty($gender)) {
@@ -32,39 +32,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (strlen($password) < 6) {
         $error = "Password must be at least 6 characters long.";
     } else {
-        try {
-            // Check if email already exists
-            $stmt = $conn->prepare("SELECT user_id FROM tbl_users WHERE email = :email");
-            $stmt->execute(['email' => $email]);
+        // Check if email already exists
+        $stmt = $conn->prepare("SELECT user_id FROM tbl_users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $error = "Email already registered.";
+        } else {
+            // Hash password
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             
-            if ($stmt->rowCount() > 0) {
-                $error = "Email already registered.";
-            } else {
-                // Hash password
-                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-                // Insert new user
-                $insert = $conn->prepare("INSERT INTO tbl_users 
-                    (name, email, password, phone, dob, gender, role, created_at, updated_at)
-                    VALUES (:name, :email, :password, :phone, :dob, :gender, 'user', NOW(), NOW())");
-
-                $insert->execute([
-                    'name' => $name,
-                    'email' => $email,
-                    'password' => $hashed_password,
-                    'phone' => $phone,
-                    'dob' => $dob,
-                    'gender' => $gender
-                ]);
-
+            // Insert new user
+            $stmt = $conn->prepare("INSERT INTO tbl_users (name, email, password, phone, dob, gender, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, 'user', NOW(), NOW())");
+            $stmt->bind_param("ssssss", $name, $email, $hashed_password, $phone, $dob, $gender);
+            
+            if ($stmt->execute()) {
                 $success = "Registration successful! Please login.";
+                // Redirect to login page after 2 seconds
                 header("refresh:2;url=login.php");
+            } else {
+                $error = "Registration failed. Please try again.";
             }
-        } catch (PDOException $e) {
-            $error = "Database error: " . $e->getMessage();
         }
+        $stmt->close();
     }
 }
+
+$conn->close();
 ?>
 
 
