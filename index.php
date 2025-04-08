@@ -1,5 +1,6 @@
 <?php
-include 'db_connect.php'; // This should now use PDO internally
+// In index.php
+include('/var/www/html/db_connect.php'); // This path should match where your file is// This should now use PDO internally
 session_start();
 
 try {
