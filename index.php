@@ -2,10 +2,7 @@
 session_start(); // Start the session
 include 'db_connect.php'; // Ensure this file contains the database connection
 
-// Check if the connection was successful
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+
 ?>
 
 <!DOCTYPE html>
