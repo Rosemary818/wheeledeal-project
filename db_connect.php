@@ -1,23 +1,18 @@
 <?php
-$host = "dpg-cvpvbphr0fns73894490-a.oregon-postgres.render.com";
-$dbname = "wheeledeal_db";
-$username = "wheeledeal_db_user";
-$password = "5F5ibmaatqHGXob4HrQu2yr3QLaVzCVt";
-$port = "5432";
+$host = "localhost"; // Change if using a different host
+$dbname = "wheeledeal_db"; // Your database name
+$username = "root"; // Change if using a different MySQL user
+$password = ""; // Change if using a password
 
-try {
-    // Create the PDO connection
-    $conn = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $username, $password);
+// Create connection
+$conn = new mysqli($host, $username, $password, $dbname);
 
-    // Set error and fetch modes
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-
-    // Optional debug message
-    echo "✅ Connected to PostgreSQL successfully";
-} catch (PDOException $e) {
-    // Log the error message
-    error_log("Connection failed: " . $e->getMessage());
-    die("Connection failed: " . $e->getMessage());
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
+
+// Set charset to UTF-8 (optional, but recommended)
+$conn->set_charset("utf8");
+
 ?>
