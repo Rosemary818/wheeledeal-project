@@ -14,48 +14,69 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Invalid email format.";
     } else {
-        try {
-            // Check in users table
-            $query = "SELECT user_id, name, email, password, role FROM tbl_users WHERE email = :email";
-            $stmt = $conn->prepare($query);
-            $stmt->execute(['email' => $email]);
-            $user = $stmt->fetch();
+        // Check in users table
+        $query = "SELECT user_id, name, email, password, role FROM tbl_users WHERE email = ?";
+        $stmt = $conn->prepare($query);
+        
+        if ($stmt === false) {
+            $error = "Database error: " . $conn->error;
+        } else {
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-            if ($user && password_verify($password, $user['password'])) {
-                // Store user data in session
-                $_SESSION['user_id'] = $user['user_id'];
-                $_SESSION['email'] = $user['email'];
-                $_SESSION['name'] = $user['name'];
-                $_SESSION['role'] = $user['role'];
-                $_SESSION['is_admin'] = ($user['role'] === 'admin') ? 1 : 0;
+            if ($result->num_rows === 1) {
+                $user = $result->fetch_assoc();
+                $stmt->close();
 
-                // Check if this is the user's first login
-                $check_login = "SELECT * FROM tbl_login WHERE user_id = :user_id";
-                $check_stmt = $conn->prepare($check_login);
-                $check_stmt->execute(['user_id' => $user['user_id']]);
+                if (password_verify($password, $user['password'])) {
+                    // Store user data in session
+                    $_SESSION['user_id'] = $user['user_id'];
+                    $_SESSION['email'] = $user['email'];
+                    $_SESSION['name'] = $user['name'];
+                    $_SESSION['role'] = $user['role'];
+                    $_SESSION['is_admin'] = ($user['role'] === 'admin') ? 1 : 0;
 
-                if ($check_stmt->rowCount() === 0) {
-                    // First time login - store in tbl_login
-                    $login_query = "INSERT INTO tbl_login (user_id) VALUES (:user_id)";
-                    $login_stmt = $conn->prepare($login_query);
-                    $login_stmt->execute(['user_id' => $user['user_id']]);
-                }
+                    // Check if this is the user's first login
+                    $check_login = "SELECT * FROM tbl_login WHERE user_id = ?";
+                    $check_stmt = $conn->prepare($check_login);
+                    $check_stmt->bind_param("i", $user['user_id']);
+                    $check_stmt->execute();
+                    $login_result = $check_stmt->get_result();
 
-                // Redirect based on role
-                if ($user['role'] === 'admin') {
-                    header("Location: admin_dashboard.php");
+                    if ($login_result->num_rows === 0) {
+                        // First time login - store in tbl_login
+                        $login_query = "INSERT INTO tbl_login (user_id) VALUES (?)";
+                        $login_stmt = $conn->prepare($login_query);
+                        
+                        if ($login_stmt === false) {
+                            $error = "Database error: " . $conn->error;
+                        } else {
+                            $login_stmt->bind_param("i", $user['user_id']);
+                            $login_stmt->execute();
+                            $login_stmt->close();
+                        }
+                    }
+                    $check_stmt->close();
+
+                    // Redirect based on role
+                    if ($user['role'] === 'admin') {
+                        header("Location: admin_dashboard.php");
+                    } else {
+                        header("Location: index.php");
+                    }
+                    exit();
                 } else {
-                    header("Location: index.php");
+                    $error = "Invalid email or password.";
                 }
-                exit();
             } else {
                 $error = "Invalid email or password.";
             }
-        } catch (PDOException $e) {
-            $error = "Database error: " . $e->getMessage();
         }
     }
 }
+
+$conn->close();
 ?>
 
 
