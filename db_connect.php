@@ -6,10 +6,15 @@ $password = "5F5ibmaatqHGXob4HrQu2yr3QLaVzCVt";
 $port = "5432";
 
 try {
+    // ✅ Create the PDO connection
     $conn = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $username, $password);
+
+    // ✅ Set error and fetch modes
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    // echo "✅ Connected to PostgreSQL successfully"; // Optional for debugging
+
+    // Optional debug message
+    // echo "✅ Connected to PostgreSQL successfully";
 } catch (PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }
