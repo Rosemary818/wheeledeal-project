@@ -1,9 +1,21 @@
 <?php
-session_start(); // Start the session
-include 'db_connect.php'; // Ensure this file contains the database connection
+include 'db_connect.php'; // This should now use PDO internally
+session_start();
 
+try {
+    // Prepare and execute a query using PDO
+    $stmt = $conn->query("SELECT * FROM users");
 
+    // Fetch all rows as associative arrays
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        echo "Username: " . htmlspecialchars($row['username']) . "<br>";
+    }
+
+} catch (PDOException $e) {
+    echo "Database Error: " . $e->getMessage();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
